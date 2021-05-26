@@ -24,7 +24,7 @@ static GOptionEntry options[] = {
     {"coreid", 'c', 0, G_OPTION_ARG_NONE, &display_coreid,
      "Display core_id instead of core index", NULL},
     {"oneshot", 'o', 0, G_OPTION_ARG_NONE, &oneshot,
-     "Reads sensors and exits", NULL},
+     "Read sensors and exit", NULL},
     {NULL}};
 
 static SensorSource sensor_sources[] = {

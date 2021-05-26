@@ -10,6 +10,7 @@
 #include "zenmonitor.h"
 
 gboolean display_coreid = 0;
+gboolean oneshot = 0;
 gdouble delay = 0.5;
 gchar *file = "";
 SensorDataStore *store;
@@ -22,6 +23,8 @@ static GOptionEntry options[] = {
      "Interval of refreshing informations", "SECONDS"},
     {"coreid", 'c', 0, G_OPTION_ARG_NONE, &display_coreid,
      "Display core_id instead of core index", NULL},
+    {"oneshot", 'o', 0, G_OPTION_ARG_NONE, &oneshot,
+     "Reads sensors and exits", NULL},
     {NULL}};
 
 static SensorSource sensor_sources[] = {
@@ -65,7 +68,7 @@ void flush_to_csv()
             cont = 0;
         }
     }
-    
+
     fprintf(csv, "\n");
     cont = 1;
     i = 0;
@@ -158,7 +161,9 @@ void update_data()
             }
         }
     }
-    printf("\v");
+    if(oneshot != 1) {
+        printf("\v");
+    }
 }
 
 void start_watching()
@@ -189,7 +194,11 @@ int main(int argc, char *argv[])
     store = sensor_data_store_new();
 
     init_sensors();
-    start_watching();
+    if(oneshot == 1) {
+        update_data();
+    } else {
+        start_watching();
+    }
 
     sensor_data_store_free(store);
 
